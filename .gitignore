@@ -1,0 +1,59 @@
+# General
+# =======
+
+logs/
+build/
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.swp
+*.tmp
+*.bak
+
+pids
+logs
+results
+tmp
+
+#Build
+public/css/main.css
+
+# API keys and secrets
+.env
+
+# Node and related ecosystem
+# ==========================
+.nodemonignore
+.sass-cache/
+node_modules/
+public/lib
+app/tests/coverage/
+.bower-*/
+coverage/
+
+.migration/
+bower_components
+
+# Editors
+.idea
+*.iml
+
+# Sublime editor
+# ==============
+.sublime-project
+*.sublime-project
+*.sublime-workspace
+
+# OS metadata
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Ignore built ts files
+dist/**/*
