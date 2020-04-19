@@ -28,6 +28,14 @@ export declare abstract class BaseCache {
      */
     get(key: any): any;
     /**
+     * Retrieves multiple values from cache with the specified keys.
+     * @param {any[]} keys list of string keys identifying the cached values
+     * @return {any} list of cached values corresponding to the specified keys. The list
+     * is returned in terms of (key, value) pairs.
+     * If a value is not cached or expired, the corresponding array value will be false.
+     */
+    multiGet(keys: any[]): {};
+    /**
      * Checks whether a specified key exists in the cache.
      * This can be faster than getting the value from the cache if the data is big.
      * In case a cache does not support this feature natively, this method will try to simulate it
@@ -51,6 +59,16 @@ export declare abstract class BaseCache {
      */
     set(key: any, value: any, duration?: number): boolean;
     /**
+     * Stores multiple items in cache. Each item contains a value identified by a key.
+     * If the cache already contains such a key, the existing value and
+     * expiration time will be replaced with the new ones, respectively.
+     *
+     * @param {any} items the items to be cached, as key-value pairs.
+     * @param int {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
+     * @return {any[]} array of failed keys
+     */
+    multiSet(items: any, duration?: number): any[];
+    /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
      * Nothing will be done if the cache already contains the key.
      *
@@ -61,6 +79,15 @@ export declare abstract class BaseCache {
      * @returns {boolean} whether the value is successfully stored into cache
      */
     add(key: any, value: any, duration?: number): boolean;
+    /**
+     * Stores multiple items in cache. Each item contains a value identified by a key.
+     * If the cache already contains such a key, the existing value and expiration time will be preserved.
+     *
+     * @param {any} items the items to be cached, as key-value pairs.
+     * @param {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
+     * @return {any[]} array of failed keys
+     */
+    multiAdd(items: any, duration?: number): any[];
     /**
      * Deletes a value with the specified key from cache
      *
@@ -128,10 +155,10 @@ export declare abstract class BaseCache {
      * the cached values one by one. If the underlying cache storage supports multiget,
      * this method should be overridden to exploit that feature.
      *
-     * @param {any[]} keys a list of keys identifying the cached values
+     * @param {string[]} keys a list of keys identifying the cached values
      * @returns {any} a list of cached values indexed by the keys
      */
-    protected getValues(keys: any[]): any;
+    protected getValues(keys: string[]): any;
     /**
      * Stores multiple key-value pairs in cache.
      * The default implementation calls [[setValue()]] multiple times store values one by one. If the underlying cache

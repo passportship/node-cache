@@ -7,7 +7,7 @@ function mb5(data: any): string {
 
 // TODO add dependency
 
-export abstract class BaseCache {
+export abstract class AsyncBaseCache {
     /**
      * @type {string} a string prefixed to every cache key so that it is unique globally in the whole cache storage.
      * It is recommended that you set a unique cache key prefix for each application if the same cache
@@ -47,10 +47,10 @@ export abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {any} the value stored in cache, false if the value is not in the cache, expired.
      */
-    public get(key: any): any {
+    public async get(key: any): Promise<any> {
         key = this.buildKey(key);
 
-        let value = this.getValue(key);
+        let value = await this.getValue(key);
 
         if (value === false || this.serialization === false) {
             return value;
@@ -66,14 +66,14 @@ export abstract class BaseCache {
      * is returned in terms of (key, value) pairs.
      * If a value is not cached or expired, the corresponding array value will be false.
      */
-    public multiGet(keys: any[]) {
+    public async multiGet(keys: any[]): Promise<any> {
         const keyMap = {};
 
         for (const key of keys) {
             keyMap[key] = this.buildKey(key);
         }
 
-        const values = this.getValues(_.values(keyMap));
+        const values = await this.getValues(_.values(keyMap));
         const results = {};
 
         _.forEach(keyMap, (newKey, key) => {
@@ -101,9 +101,9 @@ export abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} true if a value exists in cache, false if the value is not in the cache or expired.
      */
-    public exists(key: any): boolean {
+    public async exists(key: any): Promise<boolean> {
         key = this.buildKey(key);
-        const value = this.getValue(key);
+        const value = await this.getValue(key);
 
         return value !== false;
     }
@@ -119,14 +119,14 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public set(key: any, value: any, duration: number = 0): boolean {
+    public async set(key: any, value: any, duration: number = 0): Promise<boolean> {
         key = this.buildKey(key);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
         }
 
-        return this.setValue(key, value, duration);
+        return await this.setValue(key, value, duration);
     }
 
     /**
@@ -138,7 +138,7 @@ export abstract class BaseCache {
      * @param int {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    public multiSet(items: any, duration = 0) {
+    public async multiSet(items: any, duration = 0): Promise<any[]> {
         const data = {};
 
         _.forEach(items, (value, key) => {
@@ -150,7 +150,7 @@ export abstract class BaseCache {
             data[key] = value;
         });
 
-        return this.setValues(data, duration);
+        return await this.setValues(data, duration);
     }
 
     /**
@@ -163,14 +163,14 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public add(key: any, value: any, duration: number = 0): boolean {
+    public async add(key: any, value: any, duration: number = 0): Promise<boolean> {
         key = this.buildKey(key);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
         }
 
-        return this.addValue(key, value, duration);
+        return await this.addValue(key, value, duration);
     }
 
     /**
@@ -181,7 +181,7 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    public multiAdd(items: any, duration = 0) {
+    public async multiAdd(items: any, duration = 0): Promise<any[]> {
         const data = {};
 
         _.forEach(items, (value, key) => {
@@ -193,7 +193,7 @@ export abstract class BaseCache {
             data[key] = value;
         });
 
-        return this.addValues(data, duration);
+        return await this.addValues(data, duration);
     }
 
     /**
@@ -203,7 +203,7 @@ export abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} if no error happens during deletion
      */
-    public delete(key: any): boolean {
+    public async delete(key: any): Promise<boolean> {
         key = this.buildKey(key);
 
         return this.deleteValue(key);
@@ -215,7 +215,7 @@ export abstract class BaseCache {
      *
      * @returns {boolean} whether the flush operation was successful.
      */
-    public flush(): boolean {
+    public async flush(): Promise<boolean> {
         return this.flushValues();
     }
 
@@ -227,7 +227,7 @@ export abstract class BaseCache {
      * @param {string} key a unique key identifying the cached value
      * @returns {string | boolean} the value stored in cache, false if the value is not in the cache or expired.
      */
-    protected abstract getValue(key: string): string | boolean;
+    protected async abstract getValue(key: string): Promise<string | boolean>;
 
     /**
      * Stores a value identified by a key in cache.
@@ -239,7 +239,7 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} true if the value is successfully stored into cache, false otherwise
      */
-    protected abstract setValue(key: string, value: string, duration: number): boolean;
+    protected async abstract setValue(key: string, value: string, duration: number): Promise<boolean>;
 
     /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
@@ -251,7 +251,7 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} true if the value is successfully stored into cache, false otherwise
      */
-    protected abstract addValue(key: string, value: string, duration: number): boolean;
+    protected async abstract addValue(key: string, value: string, duration: number): Promise<boolean>;
 
     /**
      * Deletes a value with the specified key from cache
@@ -260,7 +260,7 @@ export abstract class BaseCache {
      * @param {string} key the key of the value to be deleted
      * @returns {boolean} if no error happens during deletion
      */
-    protected abstract deleteValue(key: string): boolean;
+    protected async abstract deleteValue(key: string): Promise<boolean>;
 
     /**
      * Deletes all values from cache.
@@ -268,7 +268,7 @@ export abstract class BaseCache {
      *
      * @returns {boolean} whether the flush operation was successful.
      */
-    protected abstract flushValues(): boolean;
+    protected async abstract flushValues(): Promise<boolean>;
 
     /**
      * Retrieves multiple values from cache with the specified keys.
@@ -279,11 +279,11 @@ export abstract class BaseCache {
      * @param {string[]} keys a list of keys identifying the cached values
      * @returns {any} a list of cached values indexed by the keys
      */
-    protected getValues(keys: string[]): any {
+    protected async getValues(keys: string[]): Promise<any> {
         const results: any = {};
 
         for (const key of keys) {
-            results[key] = this.getValue(key);
+            results[key] = await this.getValue(key);
         }
 
         return results;
@@ -298,11 +298,11 @@ export abstract class BaseCache {
      * @param duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @returns {any[]} array of failed keys
      */
-    protected setValues(data: any, duration: number): any[] {
+    protected async setValues(data: any, duration: number): Promise<any[]> {
         const failedKeys: any[] = [];
 
-        _.forEach(data, (value, key) => {
-            if (this.setValue(key, value, duration) === false) {
+        _.forEach(data, async (value, key) => {
+            if (await this.setValue(key, value, duration) === false) {
                 failedKeys.push(key);
             }
         });
@@ -319,11 +319,11 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @returns {any[]} array of failed keys
      */
-    protected addValues(data: any, duration: number): any[] {
+    protected async addValues(data: any, duration: number): Promise<any[]> {
         const failedKeys: any[] = [];
 
-        _.forEach(data, (value, key) => {
-            if (this.addValue(key, value, duration) === false) {
+        _.forEach(data, async (value, key) => {
+            if (await this.addValue(key, value, duration) === false) {
                 failedKeys.push(key);
             }
         });

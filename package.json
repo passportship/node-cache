@@ -31,11 +31,13 @@
     "test": "mocha test"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.77",
-    "@types/node": "^8.0.29"
+    "@types/node": "^8.0.29",
+    "@types/redis": "^2.8.18"
   },
   "keywords": [
     "node",
