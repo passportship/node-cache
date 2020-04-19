@@ -7,21 +7,25 @@ import { AsyncBaseCache } from './async-base-cache';
 // TODO add getValues, setValues and addValues with specified redis commands?
 
 /**
- * > Note: If you need to share database, you should set [[shareDatabase]] to `true` and make sure that
+ * > Note: If you need to share database, you should set [[isShareDatabase]] to `true` and make sure that
  * > [[keyPrefix]] has unique value which will allow to distinguish between cache keys and other data in database.
  */
 export class RedisCache extends AsyncBaseCache {
     private readonly _client;
-    public shareDatabase = false;
+    public isShareDatabase = false;
 
     public get client() {
         return this._client;
     }
 
-    constructor(options?: any) {
-        super();
+    constructor(options?: any, clientOptions?: any) {
+        super(options);
 
-        this._client = redis.createClient(options);
+        if (options.isShareDatabase !== undefined) {
+            this.isShareDatabase = !! options.isShareDatabase;
+        }
+
+        this._client = redis.createClient(clientOptions);
     }
 
     public async runCommand(command, ...args) {
@@ -88,7 +92,7 @@ export class RedisCache extends AsyncBaseCache {
      * @inheritDoc
      */
     protected async flushValues(): Promise<boolean> {
-        if (this.shareDatabase) {
+        if (this.isShareDatabase) {
             let cursor = 0;
 
             do {
