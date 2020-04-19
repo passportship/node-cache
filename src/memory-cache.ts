@@ -15,18 +15,22 @@ export class MemoryCache extends BaseCache {
     public exists(key: any): boolean {
         key = this.buildKey(key);
 
-        return this._cache.hasOwnProperty(key) && (this._cache[key][1] === 0 || this._cache[key][1] > Date.now() / 1000);
+        return !this.isExpired(key);
+    }
+
+    protected isExpired(key: string): boolean {
+        return !this._cache.hasOwnProperty(key) || this._cache[key][1] !== 0 || this._cache[key][1] <= Date.now() / 1000;
     }
 
     /**
      * @inheritDoc
      */
     protected getValue(key: string): string | boolean {
-        if (this._cache.hasOwnProperty(key) && (this._cache[key][1] === 0 || this._cache[key][1] > Date.now() / 1000)) {
+        if (!this.isExpired(key)) {
             return this._cache[key][0];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -42,13 +46,13 @@ export class MemoryCache extends BaseCache {
      * @inheritDoc
      */
     protected addValue(key: string, value: string, duration: number): boolean {
-        if (this._cache.hasOwnProperty(key) && (this._cache[key][1] === 0 || this._cache[key][1] > Date.now() / 1000)) {
+        if (!this.isExpired(key)) {
             return false;
-        } else {
-            this._cache[key] = [value, duration === 0 ? 0 : Date.now() / 1000 + duration];
-
-            return true;
         }
+
+        this.setValue(key, value, duration);
+
+        return true;
     }
 
     /**
@@ -56,6 +60,7 @@ export class MemoryCache extends BaseCache {
      */
     protected deleteValue(key: string): boolean {
         delete this._cache[key];
+
         return true;
     }
 
@@ -68,8 +73,3 @@ export class MemoryCache extends BaseCache {
         return true;
     }
 }
-
-
-
-
-
