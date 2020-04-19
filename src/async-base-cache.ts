@@ -19,6 +19,16 @@ export abstract class AsyncBaseCache {
 
     public serialization: boolean = true;
 
+    constructor(options: any) {
+        if (options.keyPrefix !== undefined && _.isString(options.keyPrefix)) {
+            this.keyPrefix = options.keyPrefix;
+        }
+
+        if (options.serialization !== undefined) {
+            this.serialization = !!options.serialization;
+        }
+    }
+
     /**
      * Builds a normalized cache key from a given key.
      *

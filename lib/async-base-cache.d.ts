@@ -8,6 +8,7 @@ export declare abstract class AsyncBaseCache {
      */
     keyPrefix: string;
     serialization: boolean;
+    constructor(options: any);
     /**
      * Builds a normalized cache key from a given key.
      *
