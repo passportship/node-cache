@@ -1,13 +1,13 @@
 import { AsyncBaseCache } from './async-base-cache';
 /**
- * > Note: If you need to share database, you should set [[shareDatabase]] to `true` and make sure that
+ * > Note: If you need to share database, you should set [[isShareDatabase]] to `true` and make sure that
  * > [[keyPrefix]] has unique value which will allow to distinguish between cache keys and other data in database.
  */
 export declare class RedisCache extends AsyncBaseCache {
     private readonly _client;
-    shareDatabase: boolean;
+    isShareDatabase: boolean;
     readonly client: any;
-    constructor(options?: any);
+    constructor(options?: any, clientOptions?: any);
     runCommand(command: any, ...args: any[]): Promise<any>;
     /**
      * @inheritDoc
