@@ -20,6 +20,10 @@ export declare class RedisCache extends AsyncBaseCache {
     /**
      * @inheritDoc
      */
+    multiGet(keys: any[]): Promise<any>;
+    /**
+     * @inheritDoc
+     */
     protected setValue(key: string, value: string, duration: number): Promise<boolean>;
     /**
      * @inheritDoc
