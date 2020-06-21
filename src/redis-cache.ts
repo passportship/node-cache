@@ -54,6 +54,33 @@ export class RedisCache extends AsyncBaseCache {
     /**
      * @inheritDoc
      */
+    public async multiGet(keys: any[]): Promise<any> {
+        const builtKeys = _.map(keys, (key) => this.buildKey(key));
+
+        const values = await this.runCommand('mget', builtKeys);
+
+        const results = {};
+
+        for (const [index, value]  of values.entries()) {
+            const key = keys[index];
+
+            results[key] = false;
+
+            if (value !== null) {
+                if (!this.serialization) {
+                    results[key] = value;
+                } else {
+                    results[key] = JSON.parse(value);
+                }
+            }
+        }
+
+        return results;
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected async setValue(key: string, value: string, duration: number): Promise<boolean> {
         let result = undefined;
 
