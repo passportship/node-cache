@@ -1,10 +1,15 @@
 import * as util from 'util';
 import * as _ from 'lodash';
 import * as redis from 'redis';
-import { AsyncBaseCache } from './async-base-cache';
+import { AsyncBaseCache, IOptions as IBaseOptions } from './async-base-cache';
 
 
 // TODO add getValues, setValues and addValues with specified redis commands?
+
+export interface IOptions extends IBaseOptions {
+    isSharedDatabase?: boolean;
+    clientOptions?: any;
+}
 
 /**
  * > Note: If you need to share database, you should set [[isSharedDatabase]] to `true` and make sure that
@@ -18,14 +23,14 @@ export class RedisCache extends AsyncBaseCache {
         return this._client;
     }
 
-    constructor(options?: any, clientOptions?: any) {
+    constructor(options?: IOptions) {
         super(options);
 
-        if (options.isSharedDatabase !== undefined) {
+        if (options && _.isBoolean(options.isSharedDatabase)) {
             this.isSharedDatabase = !! options.isSharedDatabase;
         }
 
-        this._client = redis.createClient(clientOptions);
+        this._client = redis.createClient(options && options.clientOptions);
     }
 
     public async runCommand(command, ...args) {
