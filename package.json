@@ -1,7 +1,7 @@
 {
   "name": "cache-list",
   "description": "Cache list",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/vruden/node-cache.git"
