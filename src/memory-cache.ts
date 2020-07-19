@@ -19,7 +19,15 @@ export class MemoryCache extends BaseCache {
     }
 
     protected isExpired(key: string): boolean {
-        return !this._cache.hasOwnProperty(key) || this._cache[key][1] !== 0 || this._cache[key][1] <= Date.now() / 1000;
+        if (!this._cache.hasOwnProperty(key)) {
+            return true;
+        }
+
+        if (this._cache[key][1] === 0) {
+            return false;
+        }
+
+        return this._cache[key][1] <= Date.now() / 1000;
     }
 
     /**
