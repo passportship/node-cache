@@ -1,3 +1,8 @@
+export interface IOptions {
+    keyPrefix?: string;
+    defaultDuration?: number;
+    serialization?: boolean;
+}
 export declare abstract class BaseCache {
     /**
      * @type {string} a string prefixed to every cache key so that it is unique globally in the whole cache storage.
@@ -7,8 +12,13 @@ export declare abstract class BaseCache {
      * To ensure interoperability, only alphanumeric characters should be used.
      */
     keyPrefix: string;
+    /**
+     * @type {number} Default duration in seconds before a cache entry will expire. Default value is 0, meaning infinity. This value is used by set() if the duration is not explicitly given.
+     */
+    defaultDuration: number;
     serialization: boolean;
-    constructor(options: any);
+    protected constructor(options?: IOptions);
+    private getDuration;
     /**
      * Builds a normalized cache key from a given key.
      *

@@ -7,6 +7,12 @@ function mb5(data: any): string {
 
 // TODO add dependency
 
+export interface IOptions {
+    keyPrefix?: string;
+    defaultDuration?: number;
+    serialization?: boolean;
+}
+
 export abstract class BaseCache {
     /**
      * @type {string} a string prefixed to every cache key so that it is unique globally in the whole cache storage.
@@ -17,16 +23,31 @@ export abstract class BaseCache {
      */
     public keyPrefix: string = '';
 
+    /**
+     * @type {number} Default duration in seconds before a cache entry will expire. Default value is 0, meaning infinity. This value is used by set() if the duration is not explicitly given.
+     */
+    public defaultDuration: number = 0;
+
     public serialization: boolean = true;
 
-    constructor(options: any) {
-        if (options.keyPrefix !== undefined && _.isString(options.keyPrefix)) {
-            this.keyPrefix = options.keyPrefix;
-        }
+    protected constructor(options?: IOptions) {
+        if (_.isPlainObject(options)) {
+            if (_.isString(options.keyPrefix)) {
+                this.keyPrefix = options.keyPrefix;
+            }
 
-        if (options.serialization !== undefined) {
-            this.serialization = !!options.serialization;
+            if (_.isInteger(options.defaultDuration) && options.defaultDuration > 0) {
+                this.defaultDuration = options.defaultDuration;
+            }
+
+            if (_.isBoolean(options.serialization)) {
+                this.serialization = options.serialization;
+            }
         }
+    }
+
+    private getDuration(duration?: number) {
+        return _.isInteger(duration) && duration >= 0 ? duration : this.defaultDuration;
     }
 
     /**
@@ -129,14 +150,14 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public set(key: any, value: any, duration: number = 0): boolean {
+    public set(key: any, value: any, duration?: number): boolean {
         key = this.buildKey(key);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
         }
 
-        return this.setValue(key, value, duration);
+        return this.setValue(key, value, this.getDuration(duration));
     }
 
     /**
@@ -148,7 +169,7 @@ export abstract class BaseCache {
      * @param int {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    public multiSet(items: any, duration = 0) {
+    public multiSet(items: any, duration?: number) {
         const data = {};
 
         _.forEach(items, (value, key) => {
@@ -160,7 +181,7 @@ export abstract class BaseCache {
             data[key] = value;
         });
 
-        return this.setValues(data, duration);
+        return this.setValues(data, this.getDuration(duration));
     }
 
     /**
@@ -173,14 +194,14 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public add(key: any, value: any, duration: number = 0): boolean {
+    public add(key: any, value: any, duration?: number): boolean {
         key = this.buildKey(key);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
         }
 
-        return this.addValue(key, value, duration);
+        return this.addValue(key, value, this.getDuration(duration));
     }
 
     /**
@@ -191,7 +212,7 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    public multiAdd(items: any, duration = 0) {
+    public multiAdd(items: any, duration?: number) {
         const data = {};
 
         _.forEach(items, (value, key) => {
@@ -203,7 +224,7 @@ export abstract class BaseCache {
             data[key] = value;
         });
 
-        return this.addValues(data, duration);
+        return this.addValues(data, this.getDuration(duration));
     }
 
     /**
