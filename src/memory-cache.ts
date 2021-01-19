@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { BaseCache } from './base-cache';
+import { BaseCache, IOptions } from './base-cache';
 
 export class MemoryCache extends BaseCache {
     private _cache: any = {};
@@ -8,6 +8,10 @@ export class MemoryCache extends BaseCache {
      * @inheritDoc
      */
     public serialization: boolean = false;
+
+    constructor(options?: IOptions) {
+        super(options);
+    }
 
     /**
      * @inheritDoc
@@ -35,7 +39,7 @@ export class MemoryCache extends BaseCache {
      */
     protected getValue(key: string): string | boolean {
         if (!this.isExpired(key)) {
-            return this._cache[key][0];
+            return _.cloneDeep(this._cache[key][0]);
         }
 
         return false;
