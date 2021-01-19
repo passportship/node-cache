@@ -1,10 +1,11 @@
-import { BaseCache } from './base-cache';
+import { BaseCache, IOptions } from './base-cache';
 export declare class MemoryCache extends BaseCache {
     private _cache;
     /**
      * @inheritDoc
      */
     serialization: boolean;
+    constructor(options?: IOptions);
     /**
      * @inheritDoc
      */
