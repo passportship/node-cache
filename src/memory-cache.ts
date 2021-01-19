@@ -1,5 +1,5 @@
+import * as _ from 'lodash';
 import { BaseCache } from './base-cache';
-
 
 export class MemoryCache extends BaseCache {
     private _cache: any = {};
@@ -45,7 +45,7 @@ export class MemoryCache extends BaseCache {
      * @inheritDoc
      */
     protected setValue(key: string, value: string, duration: number): boolean {
-        this._cache[key] = [value, duration === 0 ? 0 : Date.now() / 1000 + duration];
+        this._cache[key] = [_.cloneDeep(value), duration === 0 ? 0 : Date.now() / 1000 + duration];
 
         return true;
     }
