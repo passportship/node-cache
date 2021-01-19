@@ -258,7 +258,7 @@ export abstract class AsyncBaseCache {
      * @param {string} key a unique key identifying the cached value
      * @returns {string | boolean} the value stored in cache, false if the value is not in the cache or expired.
      */
-    protected async abstract getValue(key: string): Promise<string | boolean>;
+    protected abstract getValue(key: string): Promise<string | boolean>;
 
     /**
      * Stores a value identified by a key in cache.
@@ -270,7 +270,7 @@ export abstract class AsyncBaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} true if the value is successfully stored into cache, false otherwise
      */
-    protected async abstract setValue(key: string, value: string, duration: number): Promise<boolean>;
+    protected abstract setValue(key: string, value: string, duration: number): Promise<boolean>;
 
     /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
@@ -282,7 +282,7 @@ export abstract class AsyncBaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} true if the value is successfully stored into cache, false otherwise
      */
-    protected async abstract addValue(key: string, value: string, duration: number): Promise<boolean>;
+    protected abstract addValue(key: string, value: string, duration: number): Promise<boolean>;
 
     /**
      * Deletes a value with the specified key from cache
@@ -291,7 +291,7 @@ export abstract class AsyncBaseCache {
      * @param {string} key the key of the value to be deleted
      * @returns {boolean} if no error happens during deletion
      */
-    protected async abstract deleteValue(key: string): Promise<boolean>;
+    protected abstract deleteValue(key: string): Promise<boolean>;
 
     /**
      * Deletes all values from cache.
@@ -299,7 +299,7 @@ export abstract class AsyncBaseCache {
      *
      * @returns {boolean} whether the flush operation was successful.
      */
-    protected async abstract flushValues(): Promise<boolean>;
+    protected abstract flushValues(): Promise<boolean>;
 
     /**
      * Retrieves multiple values from cache with the specified keys.
