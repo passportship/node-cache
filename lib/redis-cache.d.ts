@@ -10,7 +10,7 @@ export interface IOptions extends IBaseOptions {
 export declare class RedisCache extends AsyncBaseCache {
     private readonly _client;
     isSharedDatabase: boolean;
-    readonly client: any;
+    get client(): any;
     constructor(options?: IOptions);
     runCommand(command: any, ...args: any[]): Promise<any>;
     /**
