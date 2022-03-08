@@ -16,8 +16,8 @@ export class MemoryCache extends BaseCache {
     /**
      * @inheritDoc
      */
-    public exists(key: any): boolean {
-        key = this.buildKey(key);
+    public exists(key: any, prefix?: string): boolean {
+        key = this.buildKey(key, prefix);
 
         return !this.isExpired(key);
     }

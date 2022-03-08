@@ -78,8 +78,8 @@ export abstract class AsyncBaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {any} the value stored in cache, false if the value is not in the cache, expired.
      */
-    public async get(key: any): Promise<any> {
-        key = this.buildKey(key);
+    public async get(key: any, prefix?: string): Promise<any> {
+        key = this.buildKey(key, prefix);
 
         const value = await this.getValue(key);
 
@@ -97,11 +97,11 @@ export abstract class AsyncBaseCache {
      * is returned in terms of (key, value) pairs.
      * If a value is not cached or expired, the corresponding array value will be false.
      */
-    public async multiGet(keys: any[]): Promise<any> {
+    public async multiGet(keys: any[], prefix?: string): Promise<any> {
         const keyMap = {};
 
         for (const key of keys) {
-            keyMap[key] = this.buildKey(key);
+            keyMap[key] = this.buildKey(key, prefix);
         }
 
         const values = await this.getValues(_.values(keyMap));
@@ -132,8 +132,8 @@ export abstract class AsyncBaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} true if a value exists in cache, false if the value is not in the cache or expired.
      */
-    public async exists(key: any): Promise<boolean> {
-        key = this.buildKey(key);
+    public async exists(key: any, prefix?: string): Promise<boolean> {
+        key = this.buildKey(key, prefix);
         const value = await this.getValue(key);
 
         return value !== false;
@@ -194,8 +194,8 @@ export abstract class AsyncBaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public async add(key: any, value: any, duration?: number): Promise<boolean> {
-        key = this.buildKey(key);
+    public async add(key: any, value: any, duration?: number, prefix?: string): Promise<boolean> {
+        key = this.buildKey(key, prefix);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
@@ -212,7 +212,7 @@ export abstract class AsyncBaseCache {
      * @param {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    public async multiAdd(items: any, duration?: number): Promise<any[]> {
+    public async multiAdd(items: any, duration?: number, prefix?: string): Promise<any[]> {
         const data = {};
 
         _.forEach(items, (value, key) => {
@@ -220,7 +220,7 @@ export abstract class AsyncBaseCache {
                 value = JSON.stringify(value);
             }
 
-            key = this.buildKey(key);
+            key = this.buildKey(key, prefix);
             data[key] = value;
         });
 
@@ -234,8 +234,8 @@ export abstract class AsyncBaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} if no error happens during deletion
      */
-    public async delete(key: any): Promise<boolean> {
-        key = this.buildKey(key);
+    public async delete(key: any, prefix?: string): Promise<boolean> {
+        key = this.buildKey(key, prefix);
 
         return this.deleteValue(key);
     }
