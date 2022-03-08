@@ -60,14 +60,14 @@ export abstract class AsyncBaseCache {
      * @param key the key to be normalized
      * @returns {string} the generated cache key
      */
-    public buildKey(key: any): string {
+     public buildKey(key: any, prefix?: any): string {
         if (_.isString(key)) {
             key = key.length <= 32 ? key : mb5(key);
         } else {
             key = mb5(JSON.stringify(key));
         }
 
-        return this.keyPrefix + key;
+        return (prefix || this.keyPrefix) + key;
     }
 
 
@@ -150,8 +150,8 @@ export abstract class AsyncBaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public async set(key: any, value: any, duration?: number): Promise<boolean> {
-        key = this.buildKey(key);
+    public async set(key: any, value: any, duration?: number, prefix?: string): Promise<boolean> {
+        key = this.buildKey(key, prefix);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
@@ -169,7 +169,7 @@ export abstract class AsyncBaseCache {
      * @param int {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    public async multiSet(items: any, duration?: number): Promise<any[]> {
+    public async multiSet(items: any, duration?: number, prefix?: string): Promise<any[]> {
         const data = {};
 
         _.forEach(items, (value, key) => {
@@ -177,7 +177,7 @@ export abstract class AsyncBaseCache {
                 value = JSON.stringify(value);
             }
 
-            key = this.buildKey(key);
+            key = this.buildKey(key, prefix);
             data[key] = value;
         });
 

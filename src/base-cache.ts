@@ -60,14 +60,14 @@ export abstract class BaseCache {
      * @param key the key to be normalized
      * @returns {string} the generated cache key
      */
-    public buildKey(key: any): string {
+    public buildKey(key: any, prefix?: any): string {
         if (_.isString(key)) {
             key = key.length <= 32 ? key : mb5(key);
         } else {
             key = mb5(JSON.stringify(key));
         }
 
-        return this.keyPrefix + key;
+        return (prefix || this.keyPrefix) + key;
     }
 
 
@@ -150,8 +150,8 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public set(key: any, value: any, duration?: number): boolean {
-        key = this.buildKey(key);
+    public set(key: any, value: any, duration?: number, prefix?: string): boolean {
+        key = this.buildKey(key, prefix);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
