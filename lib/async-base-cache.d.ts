@@ -37,7 +37,7 @@ export declare abstract class AsyncBaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {any} the value stored in cache, false if the value is not in the cache, expired.
      */
-    get(key: any): Promise<any>;
+    get(key: any, prefix?: string): Promise<any>;
     /**
      * Retrieves multiple values from cache with the specified keys.
      * @param {any[]} keys list of string keys identifying the cached values
@@ -45,7 +45,7 @@ export declare abstract class AsyncBaseCache {
      * is returned in terms of (key, value) pairs.
      * If a value is not cached or expired, the corresponding array value will be false.
      */
-    multiGet(keys: any[]): Promise<any>;
+    multiGet(keys: any[], prefix?: string): Promise<any>;
     /**
      * Checks whether a specified key exists in the cache.
      * This can be faster than getting the value from the cache if the data is big.
@@ -56,7 +56,7 @@ export declare abstract class AsyncBaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} true if a value exists in cache, false if the value is not in the cache or expired.
      */
-    exists(key: any): Promise<boolean>;
+    exists(key: any, prefix?: string): Promise<boolean>;
     /**
      * Stores a value identified by a key into cache.
      * If the cache already contains such a key, the existing value and
@@ -89,7 +89,7 @@ export declare abstract class AsyncBaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    add(key: any, value: any, duration?: number): Promise<boolean>;
+    add(key: any, value: any, duration?: number, prefix?: string): Promise<boolean>;
     /**
      * Stores multiple items in cache. Each item contains a value identified by a key.
      * If the cache already contains such a key, the existing value and expiration time will be preserved.
@@ -98,7 +98,7 @@ export declare abstract class AsyncBaseCache {
      * @param {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    multiAdd(items: any, duration?: number): Promise<any[]>;
+    multiAdd(items: any, duration?: number, prefix?: string): Promise<any[]>;
     /**
      * Deletes a value with the specified key from cache
      *
@@ -106,7 +106,7 @@ export declare abstract class AsyncBaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} if no error happens during deletion
      */
-    delete(key: any): Promise<boolean>;
+    delete(key: any, prefix?: string): Promise<boolean>;
     /**
      * Deletes all values from cache.
      * Be careful of performing this operation if the cache is shared among multiple applications.

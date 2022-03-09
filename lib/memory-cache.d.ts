@@ -9,7 +9,7 @@ export declare class MemoryCache extends BaseCache {
     /**
      * @inheritDoc
      */
-    exists(key: any): boolean;
+    exists(key: any, prefix?: string): boolean;
     protected isExpired(key: string): boolean;
     /**
      * @inheritDoc
