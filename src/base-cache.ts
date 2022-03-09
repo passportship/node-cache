@@ -60,14 +60,14 @@ export abstract class BaseCache {
      * @param key the key to be normalized
      * @returns {string} the generated cache key
      */
-    public buildKey(key: any): string {
+    public buildKey(key: any, prefix?: any): string {
         if (_.isString(key)) {
             key = key.length <= 32 ? key : mb5(key);
         } else {
             key = mb5(JSON.stringify(key));
         }
 
-        return this.keyPrefix + key;
+        return (prefix || this.keyPrefix) + key;
     }
 
 
@@ -78,8 +78,8 @@ export abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {any} the value stored in cache, false if the value is not in the cache, expired.
      */
-    public get(key: any): any {
-        key = this.buildKey(key);
+    public get(key: any, prefix?: string): any {
+        key = this.buildKey(key, prefix);
 
         const value = this.getValue(key);
 
@@ -97,11 +97,11 @@ export abstract class BaseCache {
      * is returned in terms of (key, value) pairs.
      * If a value is not cached or expired, the corresponding array value will be false.
      */
-    public multiGet(keys: any[]) {
+    public multiGet(keys: any[], prefix?: string) {
         const keyMap = {};
 
         for (const key of keys) {
-            keyMap[key] = this.buildKey(key);
+            keyMap[key] = this.buildKey(key, prefix);
         }
 
         const values = this.getValues(_.values(keyMap));
@@ -132,8 +132,8 @@ export abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} true if a value exists in cache, false if the value is not in the cache or expired.
      */
-    public exists(key: any): boolean {
-        key = this.buildKey(key);
+    public exists(key: any, prefix?: string): boolean {
+        key = this.buildKey(key, prefix);
         const value = this.getValue(key);
 
         return value !== false;
@@ -150,8 +150,8 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public set(key: any, value: any, duration?: number): boolean {
-        key = this.buildKey(key);
+    public set(key: any, value: any, duration?: number, prefix?: string): boolean {
+        key = this.buildKey(key, prefix);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
@@ -169,7 +169,7 @@ export abstract class BaseCache {
      * @param int {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    public multiSet(items: any, duration?: number) {
+    public multiSet(items: any, duration?: number, prefix?: string) {
         const data = {};
 
         _.forEach(items, (value, key) => {
@@ -177,7 +177,7 @@ export abstract class BaseCache {
                 value = JSON.stringify(value);
             }
 
-            key = this.buildKey(key);
+            key = this.buildKey(key, prefix);
             data[key] = value;
         });
 
@@ -194,8 +194,8 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    public add(key: any, value: any, duration?: number): boolean {
-        key = this.buildKey(key);
+    public add(key: any, value: any, duration?: number, prefix?: string): boolean {
+        key = this.buildKey(key, prefix);
 
         if (this.serialization === true) {
             value = JSON.stringify(value);
@@ -212,7 +212,7 @@ export abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    public multiAdd(items: any, duration?: number) {
+    public multiAdd(items: any, duration?: number, prefix?: string) {
         const data = {};
 
         _.forEach(items, (value, key) => {
@@ -220,7 +220,7 @@ export abstract class BaseCache {
                 value = JSON.stringify(value);
             }
 
-            key = this.buildKey(key);
+            key = this.buildKey(key, prefix);
             data[key] = value;
         });
 
@@ -234,8 +234,8 @@ export abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} if no error happens during deletion
      */
-    public delete(key: any): boolean {
-        key = this.buildKey(key);
+    public delete(key: any, prefix?: string): boolean {
+        key = this.buildKey(key, prefix);
 
         return this.deleteValue(key);
     }

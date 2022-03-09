@@ -40,8 +40,8 @@ export class RedisCache extends AsyncBaseCache {
     /**
      * @inheritDoc
      */
-    public async exists(key: any): Promise<boolean> {
-        key = this.buildKey(key);
+    public async exists(key: any, prefix?: string): Promise<boolean> {
+        key = this.buildKey(key, prefix);
 
         return !!await this.runCommand('exists', key);
     }
@@ -59,8 +59,8 @@ export class RedisCache extends AsyncBaseCache {
     /**
      * @inheritDoc
      */
-    public async multiGet(keys: any[]): Promise<any> {
-        const builtKeys = _.map(keys, (key) => this.buildKey(key));
+    public async multiGet(keys: any[], prefix?: string): Promise<any> {
+        const builtKeys = _.map(keys, (key) => this.buildKey(key, prefix));
 
         const values = await this.runCommand('mget', builtKeys);
 
