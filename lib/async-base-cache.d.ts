@@ -29,7 +29,7 @@ export declare abstract class AsyncBaseCache {
      * @param key the key to be normalized
      * @returns {string} the generated cache key
      */
-    buildKey(key: any): string;
+    buildKey(key: any, prefix?: any): string;
     /**
      * Retrieves a value from cache with a specified key.
      *
@@ -68,7 +68,7 @@ export declare abstract class AsyncBaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    set(key: any, value: any, duration?: number): Promise<boolean>;
+    set(key: any, value: any, duration?: number, prefix?: string): Promise<boolean>;
     /**
      * Stores multiple items in cache. Each item contains a value identified by a key.
      * If the cache already contains such a key, the existing value and
@@ -78,7 +78,7 @@ export declare abstract class AsyncBaseCache {
      * @param int {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    multiSet(items: any, duration?: number): Promise<any[]>;
+    multiSet(items: any, duration?: number, prefix?: string): Promise<any[]>;
     /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
      * Nothing will be done if the cache already contains the key.

@@ -29,7 +29,7 @@ export declare abstract class BaseCache {
      * @param key the key to be normalized
      * @returns {string} the generated cache key
      */
-    buildKey(key: any): string;
+    buildKey(key: any, prefix?: any): string;
     /**
      * Retrieves a value from cache with a specified key.
      *
@@ -68,7 +68,7 @@ export declare abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    set(key: any, value: any, duration?: number): boolean;
+    set(key: any, value: any, duration?: number, prefix?: string): boolean;
     /**
      * Stores multiple items in cache. Each item contains a value identified by a key.
      * If the cache already contains such a key, the existing value and
