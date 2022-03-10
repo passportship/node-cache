@@ -16,7 +16,7 @@ export declare class RedisCache extends AsyncBaseCache {
     /**
      * @inheritDoc
      */
-    exists(key: any): Promise<boolean>;
+    exists(key: any, prefix?: string): Promise<boolean>;
     /**
      * @inheritDoc
      */
@@ -24,7 +24,7 @@ export declare class RedisCache extends AsyncBaseCache {
     /**
      * @inheritDoc
      */
-    multiGet(keys: any[]): Promise<any>;
+    multiGet(keys: any[], prefix?: string): Promise<any>;
     /**
      * @inheritDoc
      */

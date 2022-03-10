@@ -37,7 +37,7 @@ export declare abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {any} the value stored in cache, false if the value is not in the cache, expired.
      */
-    get(key: any): any;
+    get(key: any, prefix?: string): any;
     /**
      * Retrieves multiple values from cache with the specified keys.
      * @param {any[]} keys list of string keys identifying the cached values
@@ -45,7 +45,7 @@ export declare abstract class BaseCache {
      * is returned in terms of (key, value) pairs.
      * If a value is not cached or expired, the corresponding array value will be false.
      */
-    multiGet(keys: any[]): {};
+    multiGet(keys: any[], prefix?: string): {};
     /**
      * Checks whether a specified key exists in the cache.
      * This can be faster than getting the value from the cache if the data is big.
@@ -56,7 +56,7 @@ export declare abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} true if a value exists in cache, false if the value is not in the cache or expired.
      */
-    exists(key: any): boolean;
+    exists(key: any, prefix?: string): boolean;
     /**
      * Stores a value identified by a key into cache.
      * If the cache already contains such a key, the existing value and
@@ -78,7 +78,7 @@ export declare abstract class BaseCache {
      * @param int {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    multiSet(items: any, duration?: number): any[];
+    multiSet(items: any, duration?: number, prefix?: string): any[];
     /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
      * Nothing will be done if the cache already contains the key.
@@ -89,7 +89,7 @@ export declare abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached value will expire. 0 means never expire.
      * @returns {boolean} whether the value is successfully stored into cache
      */
-    add(key: any, value: any, duration?: number): boolean;
+    add(key: any, value: any, duration?: number, prefix?: string): boolean;
     /**
      * Stores multiple items in cache. Each item contains a value identified by a key.
      * If the cache already contains such a key, the existing value and expiration time will be preserved.
@@ -98,7 +98,7 @@ export declare abstract class BaseCache {
      * @param {number} duration the number of seconds in which the cached values will expire. 0 means never expire.
      * @return {any[]} array of failed keys
      */
-    multiAdd(items: any, duration?: number): any[];
+    multiAdd(items: any, duration?: number, prefix?: string): any[];
     /**
      * Deletes a value with the specified key from cache
      *
@@ -106,7 +106,7 @@ export declare abstract class BaseCache {
      * a complex data structure consisting of factors representing the key.
      * @returns {boolean} if no error happens during deletion
      */
-    delete(key: any): boolean;
+    delete(key: any, prefix?: string): boolean;
     /**
      * Deletes all values from cache.
      * Be careful of performing this operation if the cache is shared among multiple applications.
