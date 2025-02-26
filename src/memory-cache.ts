@@ -9,6 +9,7 @@ export class MemoryCache extends BaseCache {
      */
     public serialization: boolean = false;
 
+    // eslint-disable-next-line  @typescript-eslint/no-useless-constructor
     constructor(options?: IOptions) {
         super(options);
     }
