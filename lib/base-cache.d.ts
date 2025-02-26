@@ -45,7 +45,7 @@ export declare abstract class BaseCache {
      * is returned in terms of (key, value) pairs.
      * If a value is not cached or expired, the corresponding array value will be false.
      */
-    multiGet(keys: any[], prefix?: string): {};
+    multiGet(keys: any[], prefix?: string): any;
     /**
      * Checks whether a specified key exists in the cache.
      * This can be faster than getting the value from the cache if the data is big.

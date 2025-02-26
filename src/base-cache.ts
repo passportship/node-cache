@@ -32,21 +32,23 @@ export abstract class BaseCache {
 
     protected constructor(options?: IOptions) {
         if (_.isPlainObject(options)) {
-            if (_.isString(options.keyPrefix)) {
+            if (_.isString(options?.keyPrefix)) {
                 this.keyPrefix = options.keyPrefix;
             }
 
+            // @ts-ignore
             if (_.isInteger(options.defaultDuration) && options.defaultDuration > 0) {
-                this.defaultDuration = options.defaultDuration;
+                this.defaultDuration = <number>options?.defaultDuration;
             }
 
-            if (_.isBoolean(options.serialization)) {
+            if (_.isBoolean(options?.serialization)) {
                 this.serialization = options.serialization;
             }
         }
     }
 
     private getDuration(duration?: number) {
+        // @ts-ignore
         return _.isInteger(duration) && duration >= 0 ? duration : this.defaultDuration;
     }
 
@@ -69,7 +71,6 @@ export abstract class BaseCache {
 
         return (prefix || this.keyPrefix) + key;
     }
-
 
     /**
      * Retrieves a value from cache with a specified key.
@@ -98,14 +99,14 @@ export abstract class BaseCache {
      * If a value is not cached or expired, the corresponding array value will be false.
      */
     public multiGet(keys: any[], prefix?: string) {
-        const keyMap = {};
+        const keyMap: any = {};
 
         for (const key of keys) {
             keyMap[key] = this.buildKey(key, prefix);
         }
 
         const values = this.getValues(_.values(keyMap));
-        const results = {};
+        const results: any = {};
 
         _.forEach(keyMap, (newKey, key) => {
             results[key] = false;
@@ -157,6 +158,7 @@ export abstract class BaseCache {
             value = JSON.stringify(value);
         }
 
+        // @ts-ignore
         return this.setValue(key, value, this.getDuration(duration));
     }
 
@@ -170,7 +172,7 @@ export abstract class BaseCache {
      * @return {any[]} array of failed keys
      */
     public multiSet(items: any, duration?: number, prefix?: string) {
-        const data = {};
+        const data: any = {};
 
         _.forEach(items, (value, key) => {
             if (this.serialization === true) {
@@ -181,6 +183,7 @@ export abstract class BaseCache {
             data[key] = value;
         });
 
+        // @ts-ignore
         return this.setValues(data, this.getDuration(duration));
     }
 
@@ -201,6 +204,7 @@ export abstract class BaseCache {
             value = JSON.stringify(value);
         }
 
+        // @ts-ignore
         return this.addValue(key, value, this.getDuration(duration));
     }
 
@@ -213,7 +217,7 @@ export abstract class BaseCache {
      * @return {any[]} array of failed keys
      */
     public multiAdd(items: any, duration?: number, prefix?: string) {
-        const data = {};
+        const data: any = {};
 
         _.forEach(items, (value, key) => {
             if (this.serialization === true) {
@@ -224,6 +228,7 @@ export abstract class BaseCache {
             data[key] = value;
         });
 
+        // @ts-ignore
         return this.addValues(data, this.getDuration(duration));
     }
 

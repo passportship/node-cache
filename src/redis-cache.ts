@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import * as redis from 'redis';
 import { AsyncBaseCache, IOptions as IBaseOptions } from './async-base-cache';
 
-
 // TODO add getValues, setValues and addValues with specified redis commands?
 
 export interface IOptions extends IBaseOptions {
@@ -27,14 +26,15 @@ export class RedisCache extends AsyncBaseCache {
         super(options);
 
         if (options && _.isBoolean(options.isSharedDatabase)) {
-            this.isSharedDatabase = !! options.isSharedDatabase;
+            this.isSharedDatabase = !!options.isSharedDatabase;
         }
 
         this._client = redis.createClient(options && options.clientOptions);
     }
 
-    public async runCommand(command, ...args) {
-        return await util.promisify(this.client[command]).bind(this.client)(...args);
+    public async runCommand(command: string, ...args: any[]) {
+        // @ts-ignore
+        return util.promisify(this.client[command]).bind(this.client)(...args);
     }
 
     /**
@@ -43,7 +43,7 @@ export class RedisCache extends AsyncBaseCache {
     public async exists(key: any, prefix?: string): Promise<boolean> {
         key = this.buildKey(key, prefix);
 
-        return !!await this.runCommand('exists', key);
+        return !!(await this.runCommand('exists', key));
     }
 
     /**
@@ -53,7 +53,6 @@ export class RedisCache extends AsyncBaseCache {
         const value = await this.runCommand('get', key);
 
         return value !== null ? value : false;
-
     }
 
     /**
@@ -64,9 +63,9 @@ export class RedisCache extends AsyncBaseCache {
 
         const values = await this.runCommand('mget', builtKeys);
 
-        const results = {};
+        const results: any = {};
 
-        for (const [index, value]  of values.entries()) {
+        for (const [index, value] of values.entries()) {
             const key = keys[index];
 
             results[key] = false;
@@ -87,7 +86,7 @@ export class RedisCache extends AsyncBaseCache {
      * @inheritDoc
      */
     protected async setValue(key: string, value: string, duration: number): Promise<boolean> {
-        let result = undefined;
+        let result;
 
         if (duration === 0) {
             result = await this.runCommand('set', key, value);
@@ -102,7 +101,7 @@ export class RedisCache extends AsyncBaseCache {
      * @inheritDoc
      */
     protected async addValue(key: string, value: string, duration: number): Promise<boolean> {
-        let result = undefined;
+        let result;
 
         if (duration === 0) {
             result = await this.runCommand('set', key, value, 'NX');
@@ -117,7 +116,7 @@ export class RedisCache extends AsyncBaseCache {
      * @inheritDoc
      */
     protected async deleteValue(key: string): Promise<boolean> {
-        return !! await this.runCommand('del', key);
+        return !!(await this.runCommand('del', key));
     }
 
     /**
@@ -128,7 +127,7 @@ export class RedisCache extends AsyncBaseCache {
             let cursor = 0;
 
             do {
-                const result = await this.runCommand('scan', '0', 'MATCH', this.keyPrefix + '*', 'COUNT', 100);
+                const result = await this.runCommand('scan', '0', 'MATCH', `${this.keyPrefix}*`, 'COUNT', 100);
 
                 cursor = _.toNumber(result[0]);
                 const keys = result[1];
@@ -141,6 +140,6 @@ export class RedisCache extends AsyncBaseCache {
             return true;
         }
 
-        return !! await this.runCommand('flushdb');
+        return !!(await this.runCommand('flushdb'));
     }
 }

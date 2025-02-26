@@ -1,3 +1,4 @@
+import * as redis from 'redis';
 import { AsyncBaseCache, IOptions as IBaseOptions } from './async-base-cache';
 export interface IOptions extends IBaseOptions {
     isSharedDatabase?: boolean;
@@ -10,9 +11,9 @@ export interface IOptions extends IBaseOptions {
 export declare class RedisCache extends AsyncBaseCache {
     private readonly _client;
     isSharedDatabase: boolean;
-    get client(): any;
+    get client(): redis.RedisClient;
     constructor(options?: IOptions);
-    runCommand(command: any, ...args: any[]): Promise<any>;
+    runCommand(command: string, ...args: any[]): Promise<any>;
     /**
      * @inheritDoc
      */
