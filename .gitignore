@@ -1,59 +1,99 @@
-# General
-# =======
-
-logs/
-build/
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-*.swp
-*.tmp
-*.bak
-
-pids
+# Logs
 logs
-results
-tmp
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-#Build
-public/css/main.css
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# API keys and secrets
-.env
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
 
-# Node and related ecosystem
-# ==========================
-.nodemonignore
-.sass-cache/
+# Dependency directories
 node_modules/
-public/lib
-app/tests/coverage/
-.bower-*/
-coverage/
+bower_components/
+jspm_packages/
 
-.migration/
-bower_components
+# Optional npm cache directory
+.npm
 
-# Editors
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+
+# IntelliJ data
 .idea
-*.iml
 
-# Sublime editor
-# ==============
-.sublime-project
-*.sublime-project
-*.sublime-workspace
+# VSCode
+.vscode
 
-# OS metadata
+# Compiled project files
+dist/*
+lib/*
+
+# SSL Certificates
+certificates/*
+!certificates/.gitkeep
+
+# MacOS DS_Store files
 .DS_Store
-Thumbs.db
-ehthumbs.db
-Icon?
 
-# Ignore built ts files
-dist/**/*
+# Allure test reports
+allure-results/
+allure-report/
+
+# Reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Cache
+.cache
+.rpt2_cache
+.rts2_cache_cjs
+.rts2_cache_es
+.rts2_cache_umd
+
+# Vue
+.nuxt
+.vuepress/dist
+
+# Next
+.next
+
+# Configs
+config.local.ts
+src/config/local/
+src/config/local*.ts
+
+# Grunt
+.grunt
+
+# Common for modules
+*.lcov
+*.tsbuildinfo
+.dynamodb
+.fusebox
+.lock-wscript
+.nyc_output
+.serverless
+.tern-port
+coverage
+lib-cov
+typings
