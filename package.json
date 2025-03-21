@@ -26,7 +26,7 @@
     "feature-hotfix": "bin/feature-to-hotfix.sh",
     "lint": "node ./node_modules/eslint/bin/eslint.js ./",
     "lint-fix": "npm run lint -- --fix",
-    "prepare": "husky install",
+    "prepare": "husky",
     "prepack": "npm run build",
     "prepublishOnly": "npm run build",
     "release": "export GIT_MERGE_AUTOEDIT=no && npm --no-git-tag-version version patch && RELEASE_VERSION=$(node -p -e \"require('./package.json').version\") && git checkout package.json package-lock.json && git flow release start v$RELEASE_VERSION && npm version patch --message \"bump server version to %s\" && git flow release finish -n v$RELEASE_VERSION && unset GIT_MERGE_AUTOEDIT",
@@ -40,10 +40,10 @@
   "devDependencies": {
     "@passportship/eslint-config-passport-rules": "^2.1.0",
     "@types/lodash": "^4.14.77",
-    "@types/redis": "^2.8.32",
     "@types/node": "20.6.0",
+    "@types/redis": "^2.8.32",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
+    "lint-staged": "^15.4.3",
     "typescript": "^5.7.2"
   },
   "keywords": [
