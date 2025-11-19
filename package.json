@@ -1,7 +1,7 @@
 {
   "name": "@passportship/cache-list",
   "description": "Cache list",
-  "version": "1.4.0",
+  "version": "2.0.0-beta.0",
   "engines": {
     "node": ">=20.6.0",
     "npm": ">=9.8.0"
