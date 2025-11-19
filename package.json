@@ -3,8 +3,8 @@
   "description": "Cache list",
   "version": "2.0.0-beta.0",
   "engines": {
-    "node": ">=20.6.0",
-    "npm": ">=9.8.0"
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "clean": "rm -rf lib",
     "dev": "npm run clean && tsc -w",
     "feature-hotfix": "bin/feature-to-hotfix.sh",
-    "lint": "node ./node_modules/eslint/bin/eslint.js ./",
+    "lint": "node ./node_modules/eslint/bin/eslint.js ./src/** --ext ts --quiet",
     "lint-fix": "npm run lint -- --fix",
     "prepare": "husky install",
     "prepack": "npm run build",
@@ -34,17 +34,16 @@
     "test": "mocha test"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
-    "redis": "^3.1.2"
+    "lodash": "^4.17.21",
+    "redis": "^5.9.0"
   },
   "devDependencies": {
-    "@passportship/eslint-config-passport-rules": "^2.1.0",
-    "@types/lodash": "^4.14.77",
-    "@types/redis": "^2.8.32",
-    "@types/node": "20.6.0",
+    "@passportship/eslint-config-passport-rules": "^3.1.0",
+    "@types/lodash": "^4.17.20",
+    "@types/node": "24.10.1",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
-    "typescript": "^5.7.2"
+    "lint-staged": "^16.2.6",
+    "typescript": "^5.9.3"
   },
   "keywords": [
     "node",
