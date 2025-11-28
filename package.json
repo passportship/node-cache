@@ -31,7 +31,7 @@
     "prepublishOnly": "npm run build",
     "release": "export GIT_MERGE_AUTOEDIT=no && npm --no-git-tag-version version patch && RELEASE_VERSION=$(node -p -e \"require('./package.json').version\") && git checkout package.json package-lock.json && git flow release start v$RELEASE_VERSION && npm version patch --message \"bump server version to %s\" && git flow release finish -n v$RELEASE_VERSION && unset GIT_MERGE_AUTOEDIT",
     "start": "npm run dev",
-    "test": "mocha test"
+    "test": "npm run build && mocha test"
   },
   "dependencies": {
     "lodash": "^4.17.21",
@@ -42,6 +42,8 @@
     "@passportship/npm-tools": "^2.0.0",
     "@types/lodash": "^4.17.20",
     "@types/node": "^24.10.1",
+    "mocha": "^10.7.3",
+    "proxyquire": "^2.1.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "typescript": "^5.9.3"
