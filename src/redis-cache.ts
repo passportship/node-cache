@@ -1,4 +1,3 @@
-import * as util from 'util';
 import * as _ from 'lodash';
 import * as redis from 'redis';
 import { AsyncBaseCache, IOptions as IBaseOptions } from './async-base-cache';
@@ -33,8 +32,7 @@ export class RedisCache extends AsyncBaseCache {
     }
 
     public async runCommand(command: string, ...args: any[]) {
-        // @ts-ignore
-        return util.promisify(this.client[command]).bind(this.client)(...args);
+        return this.client[command](...args);
     }
 
     /**
